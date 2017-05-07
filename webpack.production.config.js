@@ -1,11 +1,11 @@
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-
+const ManifestPlugin = require('webpack-manifest-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const config = {
   context: path.join(__dirname, 'src'),
-  devtool: 'eval-source-map',
   entry: './index.js',
   output: {
     filename: 'bundle.js',
@@ -16,10 +16,37 @@ const config = {
       template: './index.tmpl.html',
       inject: 'body',
       filename: 'index.html',
+      removeComments: true,
+      collapseWhitespace: true,
+      removeRedundantAttritributes: true,
+      useShortDoctype: true,
+      removeEmptyAttributes: true,
+      removeStyleLinkTypeAttributes: true,
+      keepClosingSlash: true,
+      minifyJs: true,
+      minifyCSS: true,
+      minifyURLs: true,
     }),
     new webpack.EnvironmentPlugin({
       NODE_ENV: 'production',
-      DEBUG: true,
+      DEBUG: false,
+    }),
+    new webpack.optimize.OccurrenceOrderPlugin(),
+    new webpack.optimize.UglifyJsPlugin({
+      compress: {
+        screw_ie8: true,
+        warnings: false,
+      },
+      mangle: {
+        screw_ie8: true,
+      },
+      output: {
+        comments: false,
+        screw_ie8: true,
+      },
+    }),
+    new ManifestPlugin({
+      fileName: 'asset-manifest.json',
     }),
   ],
   module: {
@@ -38,10 +65,10 @@ const config = {
             loader: 'css-loader',
             options: {
               modules: true,
-              localIdentName: '[path][name]__[local]--[hash:base64:5]',
+              localIdentName: '[name]__[local]--[hash:base64:5]',
               camelCase: true,
-              sourceMap: true,
               importLoaders: 1,
+              minimize: true,
             },
           },
           'postcss-loader',

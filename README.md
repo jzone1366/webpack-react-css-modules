@@ -16,14 +16,17 @@ Commands
 --------
 To run webpack-dev-server with Hot reload run:
 ```
+$ npm run server
+```
+To build a development bundle and index.html run:
+```
 $ npm run dev
 ```
-To build the bundle and index.html run: 
+To build the minified bundle and index.html run: 
 ```
 $ npm run build
 ```
 
 TODO
 ----
-* Split out **dev** and **prod** webpack configs.
 * Add a more complete folder structure
